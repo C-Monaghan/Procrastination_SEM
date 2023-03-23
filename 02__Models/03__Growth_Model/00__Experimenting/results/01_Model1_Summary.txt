@@ -1,0 +1,203 @@
+Wave 2 and Wave 3 Analysis
+------------------------------------------------------
+lavaan 0.6.14 ended normally after 97 iterations
+
+  Estimator                                         ML
+  Optimization method                           NLMINB
+  Number of model parameters                        57
+
+  Number of observations                          1320
+  Number of missing patterns                         1
+
+Model Test User Model:
+                                                      
+  Test statistic                              3688.109
+  Degrees of freedom                               315
+  P-value (Chi-square)                           0.000
+
+Model Test Baseline Model:
+
+  Test statistic                             12034.285
+  Degrees of freedom                               324
+  P-value                                        0.000
+
+User Model versus Baseline Model:
+
+  Comparative Fit Index (CFI)                    0.712
+  Tucker-Lewis Index (TLI)                       0.704
+                                                      
+  Robust Comparative Fit Index (CFI)             0.712
+  Robust Tucker-Lewis Index (TLI)                0.704
+
+Loglikelihood and Information Criteria:
+
+  Loglikelihood user model (H0)             -42372.147
+  Loglikelihood unrestricted model (H1)     -40528.093
+                                                      
+  Akaike (AIC)                               84858.294
+  Bayesian (BIC)                             85153.861
+  Sample-size adjusted Bayesian (SABIC)      84972.798
+
+Root Mean Square Error of Approximation:
+
+  RMSEA                                          0.090
+  90 Percent confidence interval - lower         0.087
+  90 Percent confidence interval - upper         0.093
+  P-value H_0: RMSEA <= 0.050                    0.000
+  P-value H_0: RMSEA >= 0.080                    1.000
+                                                      
+  Robust RMSEA                                   0.090
+  90 Percent confidence interval - lower         0.087
+  90 Percent confidence interval - upper         0.093
+  P-value H_0: Robust RMSEA <= 0.050             0.000
+  P-value H_0: Robust RMSEA >= 0.080             1.000
+
+Standardized Root Mean Square Residual:
+
+  SRMR                                           0.091
+
+Parameter Estimates:
+
+  Standard errors                             Standard
+  Information                                 Observed
+  Observed information based on                Hessian
+
+Latent Variables:
+                   Estimate  Std.Err  z-value  P(>|z|)   Std.lv  Std.all
+  con_w2 =~                                                             
+    Reckless_w2       1.000                               0.395    0.517
+    Organised_w2      0.863    0.007  117.362    0.000    0.341    0.408
+    Hardworking_w2    0.984    0.007  135.348    0.000    0.388    0.495
+    Self_dsplnd_w2    0.921    0.007  137.777    0.000    0.363    0.508
+    Careless_w2       0.937    0.007  125.025    0.000    0.370    0.442
+    Cautious_w2       0.886    0.007  122.420    0.000    0.350    0.431
+    Thorough_w2       0.868    0.007  125.004    0.000    0.343    0.444
+    Thrifty_w2        0.842    0.008  111.435    0.000    0.332    0.382
+  neu_w2 =~                                                             
+    Moody_w2          1.000                               0.416    0.511
+    Worrying_w2       1.269    0.017   72.780    0.000    0.528    0.585
+    Nervous_w2        1.110    0.016   67.439    0.000    0.461    0.521
+    Calm_w2           1.009    0.015   68.124    0.000    0.420    0.527
+  procras_w3 =~                                                         
+    Procras_1         1.000                               0.897    0.653
+    Procras_2         1.034    0.016   64.742    0.000    0.928    0.693
+    Procras_3         0.997    0.016   62.869    0.000    0.894    0.671
+    Procras_4         1.029    0.016   64.361    0.000    0.923    0.690
+    Procras_5         1.021    0.016   64.556    0.000    0.916    0.693
+    Procras_6         1.214    0.018   68.296    0.000    1.090    0.741
+    Procras_7         1.135    0.017   67.176    0.000    1.018    0.727
+    Procras_8         1.062    0.016   66.747    0.000    0.953    0.722
+    Procras_9         1.158    0.018   62.713    0.000    1.039    0.670
+    Procras_10        0.974    0.015   62.979    0.000    0.874    0.673
+    Procras_11        0.863    0.014   60.390    0.000    0.775    0.641
+    Procras_12        0.943    0.017   56.605    0.000    0.846    0.596
+
+Regressions:
+                   Estimate  Std.Err  z-value  P(>|z|)   Std.lv  Std.all
+  procras_w3 ~                                                          
+    Age_w2     (c)    0.005    0.002    2.067    0.039    0.006    0.057
+    con_w2    (b1)   -0.963    0.079  -12.210    0.000   -0.423   -0.423
+    neu_w2    (b2)    0.286    0.076    3.768    0.000    0.132    0.132
+    Gender            0.079    0.050    1.568    0.117    0.088    0.042
+  con_w2 ~                                                              
+    Age_w2    (a1)    0.001    0.001    1.106    0.269    0.004    0.037
+  neu_w2 ~                                                              
+    Age_w2    (a2)   -0.001    0.001   -1.057    0.290   -0.004   -0.037
+
+Intercepts:
+                   Estimate  Std.Err  z-value  P(>|z|)   Std.lv  Std.all
+   .Reckless_w2       0.000                               0.000    0.000
+   .Organised_w2      0.000                               0.000    0.000
+   .Hardworking_w2    0.000                               0.000    0.000
+   .Self_dsplnd_w2    0.000                               0.000    0.000
+   .Careless_w2       0.000                               0.000    0.000
+   .Cautious_w2       0.000                               0.000    0.000
+   .Thorough_w2       0.000                               0.000    0.000
+   .Thrifty_w2        0.000                               0.000    0.000
+   .Moody_w2          0.000                               0.000    0.000
+   .Worrying_w2       0.000                               0.000    0.000
+   .Nervous_w2        0.000                               0.000    0.000
+   .Calm_w2           0.000                               0.000    0.000
+   .Procras_1         0.000                               0.000    0.000
+   .Procras_2         0.000                               0.000    0.000
+   .Procras_3         0.000                               0.000    0.000
+   .Procras_4         0.000                               0.000    0.000
+   .Procras_5         0.000                               0.000    0.000
+   .Procras_6         0.000                               0.000    0.000
+   .Procras_7         0.000                               0.000    0.000
+   .Procras_8         0.000                               0.000    0.000
+   .Procras_9         0.000                               0.000    0.000
+   .Procras_10        0.000                               0.000    0.000
+   .Procras_11        0.000                               0.000    0.000
+   .Procras_12        0.000                               0.000    0.000
+   .con_w2            3.444    0.085   40.586    0.000    8.728    8.728
+   .neu_w2            1.890    0.094   20.167    0.000    4.548    4.548
+   .procras_w3        4.778    0.371   12.891    0.000    5.324    5.324
+
+Variances:
+                   Estimate  Std.Err  z-value  P(>|z|)   Std.lv  Std.all
+   .Reckless_w2       0.426    0.019   22.326    0.000    0.426    0.732
+   .Organised_w2      0.580    0.024   23.858    0.000    0.580    0.833
+   .Hardworking_w2    0.465    0.020   23.061    0.000    0.465    0.755
+   .Self_dsplnd_w2    0.379    0.017   22.620    0.000    0.379    0.742
+   .Careless_w2       0.561    0.024   23.608    0.000    0.561    0.804
+   .Cautious_w2       0.536    0.022   23.888    0.000    0.536    0.814
+   .Thorough_w2       0.478    0.021   23.247    0.000    0.478    0.803
+   .Thrifty_w2        0.646    0.027   24.267    0.000    0.646    0.854
+   .Moody_w2          0.488    0.022   22.112    0.000    0.488    0.739
+   .Worrying_w2       0.534    0.027   19.573    0.000    0.534    0.658
+   .Nervous_w2        0.573    0.027   21.327    0.000    0.573    0.729
+   .Calm_w2           0.458    0.021   21.596    0.000    0.458    0.722
+   .Procras_1         1.084    0.045   23.962    0.000    1.084    0.574
+   .Procras_2         0.932    0.040   23.545    0.000    0.932    0.520
+   .Procras_3         0.979    0.041   23.834    0.000    0.979    0.550
+   .Procras_4         0.937    0.040   23.670    0.000    0.937    0.524
+   .Procras_5         0.907    0.038   23.616    0.000    0.907    0.519
+   .Procras_6         0.975    0.043   22.943    0.000    0.975    0.451
+   .Procras_7         0.926    0.040   23.132    0.000    0.926    0.472
+   .Procras_8         0.837    0.036   23.236    0.000    0.837    0.479
+   .Procras_9         1.325    0.056   23.861    0.000    1.325    0.551
+   .Procras_10        0.922    0.039   23.808    0.000    0.922    0.547
+   .Procras_11        0.859    0.036   24.093    0.000    0.859    0.589
+   .Procras_12        1.300    0.053   24.457    0.000    1.300    0.645
+   .con_w2            0.155    0.009   16.659    0.000    0.999    0.999
+   .neu_w2            0.173    0.012   14.546    0.000    0.999    0.999
+   .procras_w3        0.645    0.034   18.905    0.000    0.801    0.801
+
+R-Square:
+                   Estimate
+    Reckless_w2       0.268
+    Organised_w2      0.167
+    Hardworking_w2    0.245
+    Self_dsplnd_w2    0.258
+    Careless_w2       0.196
+    Cautious_w2       0.186
+    Thorough_w2       0.197
+    Thrifty_w2        0.146
+    Moody_w2          0.261
+    Worrying_w2       0.342
+    Nervous_w2        0.271
+    Calm_w2           0.278
+    Procras_1         0.426
+    Procras_2         0.480
+    Procras_3         0.450
+    Procras_4         0.476
+    Procras_5         0.481
+    Procras_6         0.549
+    Procras_7         0.528
+    Procras_8         0.521
+    Procras_9         0.449
+    Procras_10        0.453
+    Procras_11        0.411
+    Procras_12        0.355
+    con_w2            0.001
+    neu_w2            0.001
+    procras_w3        0.199
+
+Defined Parameters:
+                   Estimate  Std.Err  z-value  P(>|z|)   Std.lv  Std.all
+    CIDE             -0.001    0.001   -1.102    0.271   -0.002   -0.016
+    NIDE             -0.000    0.000   -1.017    0.309   -0.000   -0.005
+    Ttl_Indrct_Eff   -0.002    0.001   -1.371    0.170   -0.002   -0.021
+    Total_Effect      0.003    0.003    1.261    0.207    0.004    0.036
+
