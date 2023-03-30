@@ -7,6 +7,8 @@ path_data <- "./01__Data/01__Raw_data/"
 tracker <- haven::read_sav(file.path(path_data, "Tracker.sav"))
 
 # HRS data (2016)
+cognition <- haven::read_sav(file.path(path_data, "HRS_2016/Cognition_2016.sav"))
+employement <- haven::read_sav(file.path(path_data, "HRS_2016/Employment_2016.sav"))
 lbq_w2 <- haven::read_sav(file.path(path_data, "HRS_2016/LB_Question_2016.sav"))
 
 # HRS data (2020)
@@ -21,18 +23,24 @@ mod_v <- mod_v|>
 # This is done by matching the HHID and PN numbers
 tracker <- dplyr::semi_join(tracker, mod_v, by = c("HHID", "PN"))
 
-lbq_w2 <- dplyr::semi_join(lbq_w2, mod_v, by = c("HHID", "PN")) # 2016
+cognition <- dplyr::semi_join(cognition, mod_v, by = c("HHID", "PN"))
+employement <- dplyr::semi_join(employement, mod_v, by = c("HHID", "PN"))
+lbq_w2 <- dplyr::semi_join(lbq_w2, mod_v, by = c("HHID", "PN"))
 
 # Since the data frames do not match in dimensions we need to filter down to the 
 # exact participants per wave with the smallest dimension
 tracker <- dplyr::semi_join(tracker, lbq_w2, by = c("HHID", "PN"))
+cognition <- dplyr::semi_join(cognition, lbq_w2, by = c("HHID", "PN"))
 mod_v <- dplyr::semi_join(mod_v, lbq_w2, by = c("HHID", "PN"))
 
 # Creating singular data set of relevant data ----------------------------------
 hrs_data <- cbind(
-  tracker[, c("HHID", "PN", "GENDER", "BIRTHYR", "DEGREE", "RMARST", "PAGE", "RAGE")],
+  tracker[, c("HHID", "PN", "GENDER", "BIRTHYR", "DEGREE", "PMARST", "PAGE", "RAGE")],
+  employement[, c("PJ005M1")],
+  cognition[, c("PD110", "PD111", "PD112", "PD113", "PD114", "PD115", "PD116", "PD117")],
   lbq_w2[, c("PLB031C", "PLB031E", "PLB031I", "PLB031N", "PLB031R", "PLB031V", "PLB031X", "PLB031Z_1", "PLB031Z_5", "PLB031Z_6",
-             "PLB031D", "PLB031H", "PLB031L", "PLB031Q")],
+             "PLB031D", "PLB031H", "PLB031L", "PLB031Q",
+             "PLB019A", "PLB019B", "PLB019C")],
   mod_v[, c(paste0("RV", 156:167))]
   )
 
@@ -44,9 +52,18 @@ hrs_data <- hrs_data |>
     Gender = "GENDER",
     Birth_year = "BIRTHYR",
     Education = "DEGREE",
-    Marital_status = "RMARST",
+    Marital_status = "PMARST",
     Age_w2 = "PAGE",
     Age_w3 = "RAGE",
+    Job_status = "PJ005M1",
+    Depression_1 = "PD110",
+    Depression_2 = "PD111",
+    Depression_3 = "PD112",
+    Depression_4 = "PD113",
+    Depression_5 = "PD114",
+    Depression_6 = "PD115",
+    Depression_7 = "PD116",
+    Depression_8 = "PD117",
     Reckless_w2 = "PLB031C", # Conscientiousness (Wave 2)
     Organised_w2 = "PLB031E",
     Responsible_w2 = "PLB031I",
@@ -61,6 +78,9 @@ hrs_data <- hrs_data |>
     Worrying_w2 = "PLB031H",
     Nervous_w2 = "PLB031L",
     Calm_w2 = "PLB031Q",
+    Loneliness_1 = "PLB019A", # Loneliness (Wave 2)
+    Loneliness_2 = "PLB019B",
+    Loneliness_3 = "PLB019C",
     Procras_1 = "RV156", # Procrastination (Wave 3)
     Procras_2 = "RV157",
     Procras_3 = "RV158",

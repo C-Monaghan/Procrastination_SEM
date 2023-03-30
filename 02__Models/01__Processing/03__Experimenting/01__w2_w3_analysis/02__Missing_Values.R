@@ -7,21 +7,12 @@ path_data <- "./01__Data/03__Experimenting/"
 # Reading in data -------------------------------------------------------------
 hrs_data <- readxl::read_xlsx(file.path(path_data, "HRS_Data_Longitudinal.xlsx"))
 
-# Calculating personality_maximum values for relevant variables
-personality_max <- max(hrs_data$Careless_w2, na.rm = TRUE)
-
+# Replacing preassigned missing values integers with the actual NA value ------ 
 hrs_data <- hrs_data |>
-  dplyr::mutate(Organised_w2 = personality_max + 1 - Organised_w2) |>
-  dplyr::mutate(Hardworking_w2 = personality_max + 1 - Hardworking_w2) |>
-  dplyr::mutate(Self_disiplined_w2 = personality_max + 1 - Self_disiplined_w2) |>
-  dplyr::mutate(Cautious_w2 = personality_max + 1 - Cautious_w2) |>
-  dplyr::mutate(Thorough_w2 = personality_max + 1 - Thorough_w2) |>
-  dplyr::mutate(Thrifty_w2 = personality_max + 1 - Thrifty_w2) |>
-  dplyr::mutate(Moody_w2 = personality_max + 1 - Moody_w2) |>
-  dplyr::mutate(Worrying_w2 = personality_max + 1 - Worrying_w2) |>
-  dplyr::mutate(Nervous_w2 = personality_max + 1 - Nervous_w2)
+  dplyr::mutate(across(c("Education"), ~ ifelse(. %in% 9, NA, .))) |>
+  dplyr::mutate(across("Marital_status", ~ ifelse(. %in% 5, NA, .))) |>
+  dplyr::mutate(across(c("Job_status"), ~ ifelse(. %in% c(98, 99), NA, .))) |>
+  dplyr::mutate(across(c(paste0("Procras_", 1:12), paste0("Depression_", 1:8)), ~ ifelse(. %in% c(-8, 8, 9), NA, .)))
 
 # Exporting -------------------------------------------------------------------
-export_path <- "./01__Data/03__Experimenting/"
-
-writexl::write_xlsx(hrs_data, path = file.path(export_path, "HRS_Data_Longitudinal.xlsx"))
+writexl::write_xlsx(hrs_data, path = file.path(path_data, "HRS_Data_Longitudinal.xlsx"))

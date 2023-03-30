@@ -7,6 +7,8 @@ path_data <- "./01__Data/01__Raw_data/"
 tracker <- haven::read_sav(file.path(path_data, "Tracker.sav"))
 
 # HRS data (2020)
+cognition <- haven::read_sav(file.path(path_data, "HRS_2020/Cognition_2020.sav"))
+employement <- haven::read_sav(file.path(path_data, "HRS_2020/Employement_2020.sav"))
 lbq_w3 <- haven::read_sav(file.path(path_data, "HRS_2020/LB_Question_2020.sav"))
 mod_v <- haven::read_sav(file.path(path_data, "HRS_2020/Module_V_2020.sav")) # Experimental module with the procrastination data
 
@@ -18,13 +20,18 @@ mod_v <- mod_v|>
 # Each data file is now filtered to only focus on those participants per wave
 # This is done by matching the HHID and PN numbers
 tracker <- dplyr::semi_join(tracker, mod_v, by = c("HHID", "PN"))
+cognition <- dplyr::semi_join(cognition, mod_v, by = c("HHID", "PN"))
+employement <- dplyr::semi_join(employement, mod_v, by = c("HHID", "PN"))
 lbq_w3 <- dplyr::semi_join(lbq_w3, mod_v, by = c("HHID", "PN"))
 
 # Creating singular data set of relevant data ----------------------------------
 hrs_data <- cbind(
-  tracker[, c("HHID", "PN", "GENDER", "BIRTHYR", "PAGE", "RAGE")],
+  tracker[, c("HHID", "PN", "GENDER", "BIRTHYR", "DEGREE", "RMARST", "PAGE", "RAGE")],
+  employement[, c("RJ005M1")],
+  cognition[, c("RD110", "RD111", "RD112", "RD113", "RD114", "RD115", "RD116", "RD117")],
   lbq_w3[, c("RLB031C", "RLB031E", "RLB031I", "RLB031N", "RLB031R", "RLB031V", "RLB031X", "RLB031Z1", "RLB031Z5", "RLB031Z6",
-             "RLB031D", "RLB031H", "RLB031L", "RLB031Q")],
+             "RLB031D", "RLB031H", "RLB031L", "RLB031Q",
+             "RLB035C1", "RLB035C2", "RLB035C3", "RLB035C4", "RLB035C5")],
   mod_v[, c(paste0("RV", 156:167))]
 )
 
@@ -35,8 +42,11 @@ hrs_data <- hrs_data |>
     ID = "PN",
     Gender = "GENDER",
     Birth_year = "BIRTHYR",
+    Education = "DEGREE",
+    Marital_status = "RMARST",
     Age_w2 = "PAGE",
     Age_w3 = "RAGE",
+    Job_status = "RJ005M1",
     Reckless = "RLB031C", # Start of Conscientiousness
     Organised = "RLB031E",
     Responsible = "RLB031I",
@@ -51,6 +61,19 @@ hrs_data <- hrs_data |>
     Worrying = "RLB031H",
     Nervous = "RLB031L",
     Calm = "RLB031Q", # End of Neuroticism
+    Depression_1 = "RD110",
+    Depression_2 = "RD111",
+    Depression_3 = "RD112",
+    Depression_4 = "RD113",
+    Depression_5 = "RD114",
+    Depression_6 = "RD115",
+    Depression_7 = "RD116",
+    Depression_8 = "RD117",
+    Anxiety_1 = "RLB035C1",
+    Anxiety_2 = "RLB035C2",
+    Anxiety_3 = "RLB035C3",
+    Anxiety_4 = "RLB035C4",
+    Anxiety_5 = "RLB035C5",
     Procras_1 = "RV156",
     Procras_2 = "RV157",
     Procras_3 = "RV158",
