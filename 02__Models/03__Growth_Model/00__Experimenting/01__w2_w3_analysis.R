@@ -10,10 +10,6 @@ path_data <- "./01__Data/03__Experimenting/"
 hrs_data <- readxl::read_xlsx(file.path(path_data, "HRS_Data_Longitudinal.xlsx"))
 
 # Imputation ------------------------------------------------------------------
-# hrs_imputed <- hrs_data |>
-#   dplyr::select(!c("HHID", "ID", "Gender", "Birth_year", "Education", "Marital_status", "Job_status", "Age_w2", "Age_w3")) |>
-#   mice(m = 5, maxit = 50, method = "pmm", seed = 420)
-
 # Three columns are imputed using Logistic Regressions while the rest of imputed using
 # Predictive Means Matching
 imputation_method <- c(rep("logreg", 3), rep("pmm", 37))
@@ -25,27 +21,22 @@ hrs_imputed <- hrs_data |>
   dplyr::mutate(Job_status = as.factor(Job_status)) |>
   mice(m = 5, maxit = 50, method = imputation_method, seed = 520)
 
-# Pooling the multiple data sets together
-hrs_list <- list()
 
-for(i in 1:5){
-  hrs_complete_i <- complete(hrs_imputed, i)
-  
-  # Merging back in the removed columns
-  hrs_complete_i <- cbind(
-    hrs_data[, c("HHID", "ID", "Gender", "Birth_year", "Age_w2", "Age_w3")],
-    hrs_complete_i
-  )
-  
-  # Reverting factor columns back into numeric columns
-  hrs_complete_i <- hrs_complete_i |>
-    dplyr::mutate(Education = as.numeric(Education)) |>
-    dplyr::mutate(Marital_status = as.numeric(Marital_status)) |>
-    dplyr::mutate(Job_status = as.numeric(Job_status)) |>
-    dplyr::mutate(across(c(Education, Marital_status, Job_status), ~ ifelse(. == 2, 1, 0)))
-  
-  hrs_list[[i]] <- hrs_complete_i
-}
+hrs_complete <- complete(hrs_imputed, 2)
+
+# Merging back in the removed columns
+hrs_complete <- cbind(
+  hrs_data[, c("HHID", "ID", "Gender", "Birth_year", "Age_w2", "Age_w3")],
+  hrs_complete
+)
+
+# Reverting factor columns back into numeric columns
+hrs_complete <- hrs_complete |>
+  dplyr::mutate(Education = as.numeric(Education)) |>
+  dplyr::mutate(Marital_status = as.numeric(Marital_status)) |>
+  dplyr::mutate(Job_status = as.numeric(Job_status)) |>
+  dplyr::mutate(across(c(Education, Marital_status, Job_status), ~ ifelse(. == 2, 1, 0)))
+
 
 # Creating Model --------------------------------------------------------------
 pp_model <- '
@@ -81,7 +72,7 @@ pp_model <- '
 '
 
 # Model Fitting ----------------------------------------------------------------
-fit <- semTools::growth.mi(pp_model, data = hrs_list, estimator = "ML", missing = "fiml")
+fit <- growth(pp_model, data = hrs_complete, estimator = "ML", missing = "fiml")
 summary(fit, fit.measures = TRUE, standardized = TRUE, modindices = FALSE, rsquare = TRUE)
 
 # Exporting -------------------------------------------------------------------
@@ -89,3 +80,29 @@ export_path <- "./02__Models/03__Growth_Model/00__Experimenting/"
 
 output <- capture.output(summary(fit, fit.measures = TRUE, standardized = TRUE, modindices = FALSE, rsquare = TRUE))
 writeLines(output, file.path(export_path, "results/01_Model1_Summary.txt"))
+
+# THIS CODE DID WORK AND NOW IT DOESN'T ---------------------------------------
+# Pooling the multiple data sets together
+# hrs_list <- list()
+# 
+# for(i in 1:5){
+#   hrs_complete_i <- complete(hrs_imputed, i)
+#   
+#   # Merging back in the removed columns
+#   hrs_complete_i <- cbind(
+#     hrs_data[, c("HHID", "ID", "Gender", "Birth_year", "Age_w2", "Age_w3")],
+#     hrs_complete_i
+#   )
+#   
+#   # Reverting factor columns back into numeric columns
+#   hrs_complete_i <- hrs_complete_i |>
+#     dplyr::mutate(Education = as.numeric(Education)) |>
+#     dplyr::mutate(Marital_status = as.numeric(Marital_status)) |>
+#     dplyr::mutate(Job_status = as.numeric(Job_status)) |>
+#     dplyr::mutate(across(c(Education, Marital_status, Job_status), ~ ifelse(. == 2, 1, 0)))
+#   
+#   hrs_list[[i]] <- hrs_complete_i
+# }
+
+# fit <- semTools::growth.mi(pp_model, data = hrs_list, estimator = "ML", missing = "fiml")
+# summary(fit, fit.measures = TRUE, standardized = TRUE, modindices = FALSE, rsquare = TRUE)
