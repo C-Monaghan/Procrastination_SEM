@@ -15,6 +15,8 @@ hrs_data <- hrs_data  |>
   dplyr::mutate(Gender = ifelse(Gender == 1, 0, 1),
                 Education = ifelse(Education %in% c(0, 1, 2), 0, 1),
                 Marital_status = ifelse(Marital_status == 1, 1, 0),
+                Life_satisfaction = ifelse(Life_satisfaction == c(1, 2, 3), 1, 0),
+                Health_assessment = ifelse(Health_assessment ==  c(1, 2, 3), 1, 0),
                 Job_status = ifelse(Job_status == 5, 1, 0),
                 Depression_1 = ifelse(Depression_1 == 5, 1, 2),
                 Depression_2 = ifelse(Depression_2 == 5, 1, 2),
@@ -36,7 +38,7 @@ hrs_data <- hrs_data  |>
                 Loneliness_1 = dplyr::recode(Loneliness_1, '1' = 3, '2' = 2, '3' = 1),
                 Loneliness_2 = dplyr::recode(Loneliness_2, '1' = 3, '2' = 2, '3' = 1),
                 Loneliness_3 = dplyr::recode(Loneliness_3, '1' = 3, '2' = 2, '3' = 1),
-                )
+  )
 
 # Exporting -------------------------------------------------------------------
 export_path <- "./01__Data/03__Experimenting/"

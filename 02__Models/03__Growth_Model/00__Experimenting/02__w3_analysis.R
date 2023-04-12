@@ -1,7 +1,6 @@
 rm(list=ls()) # Clearing work space
 
 library(lavaan)
-library(lavaanPlot)
 library(mice)
 
 path_data <- "./01__Data/03__Experimenting/"
@@ -10,10 +9,6 @@ path_data <- "./01__Data/03__Experimenting/"
 hrs_data <- readxl::read_xlsx(file.path(path_data, "HRS_Data_Longitudinal(2).xlsx"))
 
 # Imputation ------------------------------------------------------------------
-# hrs_imputed <- hrs_data |>
-#   dplyr::select(!c("HHID", "ID", "Gender", "Birth_year", "Age_w2", "Age_w3")) |>
-#   mice(m = 5, maxit = 50, method = "pmm", seed = 580)
-
 # Three columns are imputed using Logistic Regressions while the rest of imputed using
 # Predictive Means Matching
 imputation_method <- c(rep("logreg", 3), rep("pmm", 39))

@@ -1,7 +1,6 @@
 rm(list=ls()) # Clearing work space
 
 library(lavaan)
-# library(mice)
 
 path_data <- "./01__Data/03__Experimenting/"
 
@@ -48,11 +47,21 @@ pp_model <- '
 fit <- growth(pp_model, data = hrs_data, estimator = "ML", missing = "fiml")
 summary(fit, fit.measures = TRUE, standardized = TRUE, modindices = FALSE, rsquare = TRUE)
 
+
+# Plotting --------------------------------------------------------------------
+sem_plot <- lavaanPlot(model = fit, node_options = list(shape = "box", fontname = "Helvetica"), 
+                       edge_options = list(color = "grey"), coefs = TRUE)
+
 # Exporting -------------------------------------------------------------------
 export_path <- "./02__Models/03__Growth_Model/00__Experimenting/"
 
+# Results
 output <- capture.output(summary(fit, fit.measures = TRUE, standardized = TRUE, modindices = FALSE, rsquare = TRUE))
 writeLines(output, file.path(export_path, "results/01_Model1_Summary.txt"))
+
+# Plot
+save_png(sem_plot, file.path(export_path, "results/SEM_plot.png"))
+
 
 # Old Code ---------------------------------------------------------------------
 # Imputation ------------------------------------------------------------------
@@ -110,5 +119,4 @@ writeLines(output, file.path(export_path, "results/01_Model1_Summary.txt"))
 # }
 # 
 # fit <- semTools::growth.mi(pp_model, data = hrs_list, estimator = "ML", missing = "fiml")
-# summary(fit, fit.measures = TRUE, standardized = TRUE, modindices = FALSE, rsquare = TRUE)
-
+# summary(fit, fit.measures = TRUE, standardized = TRUE, modindices = FALSE, rsquare = TRUE)ca
