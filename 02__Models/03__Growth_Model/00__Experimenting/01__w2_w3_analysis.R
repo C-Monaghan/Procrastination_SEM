@@ -7,6 +7,11 @@ path_data <- "./01__Data/03__Experimenting/"
 # Reading in data -------------------------------------------------------------
 hrs_data <- readxl::read_xlsx(file.path(path_data, "HRS_Data_Longitudinal.xlsx"))
 
+hrs_reduced <- hrs_data |>
+  dplyr::select(!c(Reckless_w2, Organised_w2, Responsible_w2, Hardworking_w2, Careless_w2, 
+                   Impulsive_w2, Cautious_w2, Thorough_w2, Self_disiplined_w2, Thrifty_w2, 
+                   Moody_w2, Worrying_w2, Nervous_w2, Calm_w2))
+
 # Creating Model --------------------------------------------------------------
 pp_model <- '
   # Latent Variables
@@ -23,7 +28,7 @@ pp_model <- '
   Procras_10 ~~ Procras_11;
   Depression_1 ~~ Depression_7;
   Depression_4 ~~ Depression_6;
-
+  
   # Direct Effect
   procras_w3 ~ c*Age_w2 + b1*dep_w2 +b2*lon_w2 + Gender + Education + Marital_status + Job_status + Life_satisfaction + Health_assessment;
   
