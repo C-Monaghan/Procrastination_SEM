@@ -1,16 +1,12 @@
 rm(list=ls()) # Clearing work space
 
 library(lavaan)
+library(lavaanPlot)
 
 path_data <- "./01__Data/03__Experimenting/"
 
 # Reading in data -------------------------------------------------------------
 hrs_data <- readxl::read_xlsx(file.path(path_data, "HRS_Data_Longitudinal.xlsx"))
-
-hrs_reduced <- hrs_data |>
-  dplyr::select(!c(Reckless_w2, Organised_w2, Responsible_w2, Hardworking_w2, Careless_w2, 
-                   Impulsive_w2, Cautious_w2, Thorough_w2, Self_disiplined_w2, Thrifty_w2, 
-                   Moody_w2, Worrying_w2, Nervous_w2, Calm_w2))
 
 # Creating Model --------------------------------------------------------------
 pp_model <- '
@@ -54,8 +50,22 @@ summary(fit, fit.measures = TRUE, standardized = TRUE, modindices = FALSE, rsqua
 
 
 # Plotting --------------------------------------------------------------------
-sem_plot <- lavaanPlot(model = fit, node_options = list(shape = "box", fontname = "Helvetica"), 
-                       edge_options = list(color = "grey"), coefs = TRUE)
+# Creating a list of names 
+sem_names <- list(Age_w2 = "Age", dep_w2 = "Depression", lon_w2 = "Loneliness", procras_w3 = "Procrastination",
+                   Depression_1 = "D1", Depression_2 = "D2", Depression_3 = "D3", Depression_4 = "D4",
+                   Depression_5 = "D5", Depression_6 = "D6", Depression_7 = "D7", Depression_8 = "D8",
+                   Loneliness_1 = "L1", Loneliness_2 = "L2", Loneliness_3 = "L3",
+                   Procras_1 = "P1", Procras_2 = "P2", Procras_3 = "P3", Procras_4 = "P4", Procras_5 = "P5",
+                   Procras_6 = "P6", Procras_7 = "P7", Procras_8 = "P8", Procras_9 = "P9", Procras_10 = "P10",
+                   Procras_11 = "P11", Procras_12 = "P12",
+                   Gender = "Gender", Education = "Education", Marital_status = "MS", Job_status = "JS",
+                   Life_satisfaction = "LS", Health_assessment = "HS")
+
+# Creating SEM Plot
+sem_plot <- lavaanPlot(model = fit, labels = sem_names, 
+                       node_options = list(shape = "box", fontname = "Helvetica"), 
+                       edge_options = list(color = "grey"), 
+                       coefs = TRUE, stand = TRUE, stars = "regress")
 
 # Exporting -------------------------------------------------------------------
 export_path <- "./02__Models/03__Growth_Model/00__Experimenting/"
