@@ -20,10 +20,7 @@ hrs_data <- hrs_data  |>
                 Depression_5 = ifelse(Depression_5 == 5, 1, 2),
                 Depression_6 = ifelse(Depression_6 == 5, 2, 1),
                 Depression_7 = ifelse(Depression_7 == 5, 1, 2),
-                Depression_8 = ifelse(Depression_8 == 5, 1, 2),
-                Loneliness_1 = dplyr::recode(Loneliness_1, '1' = 3, '2' = 2, '3' = 1),
-                Loneliness_2 = dplyr::recode(Loneliness_2, '1' = 3, '2' = 2, '3' = 1),
-                Loneliness_3 = dplyr::recode(Loneliness_3, '1' = 3, '2' = 2, '3' = 1),
+                Depression_8 = ifelse(Depression_8 == 5, 1, 2)
   )
 
 # Exporting -------------------------------------------------------------------
