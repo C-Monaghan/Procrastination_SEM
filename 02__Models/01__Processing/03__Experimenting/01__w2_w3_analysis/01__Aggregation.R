@@ -41,14 +41,11 @@ mod_v <- dplyr::semi_join(mod_v, lbq_w2, by = c("HHID", "PN"))
 
 # Creating singular data set of relevant data ----------------------------------
 hrs_data <- cbind(
-  tracker[, c("HHID", "PN", "GENDER", "BIRTHYR", "DEGREE", "PMARST", "PAGE", "RAGE")],
-  demographics[, c("PB000")],
+  tracker[, c("HHID", "PN", "GENDER", "BIRTHYR", "DEGREE", "PMARST", "PAGE")],
   health[, c("PC001")],
   employement[, c("PJ005M1")],
   cognition[, c("PD110", "PD111", "PD112", "PD113", "PD114", "PD115", "PD116", "PD117")],
-  lbq_w2[, c("PLB031C", "PLB031E", "PLB031I", "PLB031N", "PLB031R", "PLB031V", "PLB031X", "PLB031Z_1", "PLB031Z_5", "PLB031Z_6",
-             "PLB031D", "PLB031H", "PLB031L", "PLB031Q",
-             "PLB019A", "PLB019B", "PLB019C")],
+  lbq_w2[, c("PLB019A", "PLB019B", "PLB019C")],
   mod_v[, c(paste0("RV", 156:167))]
   )
 
@@ -62,11 +59,9 @@ hrs_data <- hrs_data |>
     Education = "DEGREE",
     Marital_status = "PMARST",
     Age_w2 = "PAGE",
-    Age_w3 = "RAGE",
-    Life_satisfaction = "PB000",
     Health_assessment = "PC001",
     Job_status = "PJ005M1",
-    Depression_1 = "PD110",
+    Depression_1 = "PD110", # Depression (2016)
     Depression_2 = "PD111",
     Depression_3 = "PD112",
     Depression_4 = "PD113",
@@ -74,24 +69,10 @@ hrs_data <- hrs_data |>
     Depression_6 = "PD115",
     Depression_7 = "PD116",
     Depression_8 = "PD117",
-    Reckless_w2 = "PLB031C", # Conscientiousness (Wave 2)
-    Organised_w2 = "PLB031E",
-    Responsible_w2 = "PLB031I",
-    Hardworking_w2 = "PLB031N",
-    Self_disiplined_w2 = "PLB031R",
-    Careless_w2 = "PLB031V",
-    Impulsive_w2 = "PLB031X",
-    Cautious_w2 = "PLB031Z_1",
-    Thorough_w2 = "PLB031Z_5",
-    Thrifty_w2 = "PLB031Z_6", 
-    Moody_w2 = "PLB031D", # Neuroticism (Wave 2)
-    Worrying_w2 = "PLB031H",
-    Nervous_w2 = "PLB031L",
-    Calm_w2 = "PLB031Q",
-    Loneliness_1 = "PLB019A", # Loneliness (Wave 2)
+    Loneliness_1 = "PLB019A", # Loneliness (2016)
     Loneliness_2 = "PLB019B",
     Loneliness_3 = "PLB019C",
-    Procras_1 = "RV156", # Procrastination (Wave 3)
+    Procras_1 = "RV156", # Procrastination (2020)
     Procras_2 = "RV157",
     Procras_3 = "RV158",
     Procras_4 = "RV159",
