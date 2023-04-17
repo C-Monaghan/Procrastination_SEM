@@ -8,6 +8,7 @@ path_data <- "./01__Data/03__Experimenting/"
 # Reading in data -------------------------------------------------------------
 hrs_data <- readxl::read_xlsx(file.path(path_data, "HRS_Data_Longitudinal.xlsx"))
 
+
 # Creating Model --------------------------------------------------------------
 pp_model <- '
   # LATENT VARIABLES
@@ -43,20 +44,17 @@ pp_model <- '
 '
 
 # Model Fitting ----------------------------------------------------------------
-fit <- sem(pp_model, data = hrs_data, estimator = "ML", missing = "fiml")
+fit <- sem(pp_model, data = x, estimator = "ML", missing = "fiml")
 summary(fit, fit.measures = TRUE, standardized = TRUE, modindices = FALSE, rsquare = TRUE)
-
 
 # Plotting --------------------------------------------------------------------
 # Creating a list of names 
 sem_names <- list(Age_w2 = "Age", dep_w2 = "Depression", procras_w3 = "Procrastination",
-                   Depression_1 = "D1", Depression_2 = "D2", Depression_3 = "D3", Depression_4 = "D4",
-                   Depression_5 = "D5", Depression_6 = "D6", Depression_7 = "D7", Depression_8 = "D8",
-                   Procras_1 = "P1", Procras_2 = "P2", Procras_3 = "P3", Procras_4 = "P4", Procras_5 = "P5",
-                   Procras_6 = "P6", Procras_7 = "P7", Procras_8 = "P8", Procras_9 = "P9", Procras_10 = "P10",
-                   Procras_11 = "P11", Procras_12 = "P12",
-                   Gender = "Gender", Education = "Education", Marital_status = "MS", 
-                  Job_status = "JS", Health_assessment = "HS")
+                  Depression_1 = "D1", Depression_2 = "D2", Depression_3 = "D3", Depression_4 = "D4",
+                  Depression_5 = "D5", Depression_6 = "D6", Depression_7 = "D7", Depression_8 = "D8",
+                  Procras_1 = "P1", Procras_2 = "P2", Procras_3 = "P3", Procras_4 = "P4", Procras_5 = "P5", Procras_6 = "P6",
+                  Procras_7 = "P7", Procras_8 = "P8", Procras_9 = "P9", Procras_10 = "P10", Procras_11 = "P11", Procras_12 = "P12",
+                  Gender = "Gender", Education = "Education", Marital_status = "MS", Job_status = "JS", Health_assessment = "Health")
 
 # Creating SEM Plot
 sem_plot <- lavaanPlot(model = fit, labels = sem_names, 
@@ -74,3 +72,4 @@ writeLines(output, file.path(export_path, "results/01_Model1_Summary.txt"))
 # Plot
 save_png(sem_plot, file.path(export_path, "results/SEM_plot.png"))
 
+  
