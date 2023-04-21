@@ -2,7 +2,7 @@
 # -----------------------------------------------------------------------------
 rm(list=ls()) # Clearing work space
 
-path_data <- "./01__Data/03__Experimenting/"
+path_data <- "./01__Data/02__Processed_data/"
 
 # Reading in data -------------------------------------------------------------
 hrs_data <- readxl::read_xlsx(file.path(path_data, "HRS_Data_Longitudinal.xlsx"))

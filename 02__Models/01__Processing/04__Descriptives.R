@@ -33,15 +33,43 @@ hrs_data %>%
   select(Age_w2, Health_assessment, Procrastination_total, Depression_total) %>%
   apply(2, function(x) sd(x, na.rm = TRUE)/sqrt(length(x)))
 
-# Frequency table for categorical variables
+# Creating a descriptive table -----------------------------------------------
+names <- list(
+  Age_w2 = "Age", Procrastination_total = "Procrastination", Depression_total = "Depression", 
+  Health_assessment = "Health", Education = "Education", Job_status = "Retired (Yes/No)", 
+  Marital_status = "Married (Yes/No)"
+  )
+stat <- list(
+  all_continuous() ~ c("{mean}, ({sd})", "{median}", "{min}, {max}"),
+  all_categorical() ~ "{n} / {N} ({p}%)"
+  )
+
+
 hrs_data %>%
-  select(Education, Marital_status, Job_status) %>%
-  table()
+  select(Age_w2, Procrastination_total, Depression_total, 
+         Health_assessment, Education, Job_status, 
+         Marital_status) %>%
+  tbl_summary(type = all_continuous() ~ "continuous2",
+              label = names, 
+              statistic = stat, 
+              digits = all_continuous() ~ 2, 
+              missing = "no") %>%
+  bold_labels()
+
+hrs_data %>%
+  select(Age_w2, Procrastination_total, Depression_total, 
+         Health_assessment, Education, Job_status, 
+         Marital_status) %>%
+  tbl_summary(type = all_continuous() ~ "continuous2",
+              label = names, 
+              statistic = all_continuous() ~ "{mean}, ({sd})", 
+              digits = all_continuous() ~ 2, 
+              missing = "no") %>%
+  add_overall(last = TRUE,
+              statistics = all_continuous() ~ "{median}",
+              digits = all_continuous() ~ 2)
 
 
-d_table <- tbl_summary(
-  hrs_data %>%
-    select(Age_w2, Procrastination_total) %>%
-    summarise(mean = mean(c(Age_w2, Procrastination_total))))
 
-print()
+
+
