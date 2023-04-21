@@ -5,38 +5,26 @@ rm(list=ls()) # Clearing work space
 library(dplyr)
 library(gtsummary)
 
-path_data <- "./01__Data/03__Experimenting/"
+path_data <- "./01__Data/02__Processed_data/"
 
 # Reading in data -------------------------------------------------------------
 hrs_data <- readxl::read_xlsx(file.path(path_data, "HRS_Data_Longitudinal.xlsx"))
 
 # Creating initial total columns ----------------------------------------------
-hrs_data <- hrs_data %>%
+hrs_data_descript <- hrs_data %>%
   mutate(Depression_total = rowSums(select(., starts_with("Depression")), na.rm = TRUE),
-         Procrastination_total = rowSums(select(., starts_with("Procras")), na.rm = TRUE))
+         Loneliness_total = rowSums(select(., starts_with("Loneliness")), na.rm = TRUE),
+         Procrastination_total = rowSums(select(., starts_with("Procras")), na.rm = TRUE)) %>%
+  mutate(across(c("Depression_total", "Loneliness_total", "Procrastination_total"), 
+                ~ if_else(. %in% 0, NA, .))) %>%
+  select(Gender, Age_w2, Education, Marital_status, Job_status, 
+         Depression_total, Loneliness_total, Procrastination_total)
 
-# Any total columns equal to 0 are assigned as missing (NA)
-hrs_data <- hrs_data %>%
-  mutate(across(c("Depression_total",
-                  "Procrastination_total"), ~ if_else(. %in% 0, NA, .)))
-
-# Generating descriptive
-# Mean, Median, Range
-summary(select(hrs_data, Age_w2, Health_assessment, Procrastination_total, Depression_total))
-
-# Standard Deviations
-sd <- summarise(select(hrs_data, Age_w2, Health_assessment, Procrastination_total, Depression_total),
-                across(everything(), sd, na.rm = TRUE))
-
-# Standard error of mean
-hrs_data %>%
-  select(Age_w2, Health_assessment, Procrastination_total, Depression_total) %>%
-  apply(2, function(x) sd(x, na.rm = TRUE)/sqrt(length(x)))
 
 # Creating a descriptive table -----------------------------------------------
 names <- list(
   Age_w2 = "Age", Procrastination_total = "Procrastination", Depression_total = "Depression", 
-  Health_assessment = "Health", Education = "Education", Job_status = "Retired (Yes/No)", 
+  Loneliness_total = "Loneliness", Education = "Education", Job_status = "Retired (Yes/No)", 
   Marital_status = "Married (Yes/No)"
   )
 stat <- list(
@@ -45,29 +33,16 @@ stat <- list(
   )
 
 
-hrs_data %>%
-  select(Age_w2, Procrastination_total, Depression_total, 
-         Health_assessment, Education, Job_status, 
-         Marital_status) %>%
-  tbl_summary(type = all_continuous() ~ "continuous2",
+hrs_data_descript %>%
+  tbl_summary(type = list(Age_w2 ~ "continuous2",
+                          Procrastination_total ~ "continuous2",
+                          Depression_total ~ "continuous2",
+                          Loneliness_total ~ "continuous2"),
               label = names, 
               statistic = stat, 
               digits = all_continuous() ~ 2, 
               missing = "no") %>%
   bold_labels()
-
-hrs_data %>%
-  select(Age_w2, Procrastination_total, Depression_total, 
-         Health_assessment, Education, Job_status, 
-         Marital_status) %>%
-  tbl_summary(type = all_continuous() ~ "continuous2",
-              label = names, 
-              statistic = all_continuous() ~ "{mean}, ({sd})", 
-              digits = all_continuous() ~ 2, 
-              missing = "no") %>%
-  add_overall(last = TRUE,
-              statistics = all_continuous() ~ "{median}",
-              digits = all_continuous() ~ 2)
 
 
 
