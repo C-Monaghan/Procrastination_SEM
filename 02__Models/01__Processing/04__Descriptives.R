@@ -3,15 +3,18 @@
 rm(list=ls()) # Clearing work space
 
 library(dplyr)
-library(gtsummary)
 
 path_data <- "./01__Data/02__Processed_data/"
 
 # Reading in data -------------------------------------------------------------
 hrs_data <- readxl::read_xlsx(file.path(path_data, "HRS_Data_Longitudinal.xlsx"))
 
-# Creating initial total columns ----------------------------------------------
+# Data manipulation -----------------------------------------------------------
+# Initially, we want to remove the participants with missing values in their covariates
+# Then we create summation columns for our dependent variables, setting those columns with
+# a value of 0 to NA, and then selecting only the necessary data columns
 hrs_data_descript <- hrs_data %>%
+  filter(complete.cases(Marital_status, Job_status)) %>%
   mutate(Depression_total = rowSums(select(., starts_with("Depression")), na.rm = TRUE),
          Loneliness_total = rowSums(select(., starts_with("Loneliness")), na.rm = TRUE),
          Procrastination_total = rowSums(select(., starts_with("Procras")), na.rm = TRUE)) %>%
@@ -20,31 +23,14 @@ hrs_data_descript <- hrs_data %>%
   select(Gender, Age_w2, Education, Marital_status, Job_status, 
          Depression_total, Loneliness_total, Procrastination_total)
 
-
-# Creating a descriptive table -----------------------------------------------
-names <- list(
-  Age_w2 = "Age", Procrastination_total = "Procrastination", Depression_total = "Depression", 
-  Loneliness_total = "Loneliness", Education = "Education", Job_status = "Retired (Yes/No)", 
-  Marital_status = "Married (Yes/No)"
-  )
-stat <- list(
-  all_continuous() ~ c("{mean}, ({sd})", "{median}", "{min}, {max}"),
-  all_categorical() ~ "{n} / {N} ({p}%)"
-  )
-
+# Calculate mean scores for numerical variables
+hrs_data_descript %>%
+  summarise(mean_depression = mean(Depression_total, na.rm = TRUE),
+            mean_loneliness = mean(Loneliness_total, na.rm = TRUE),
+            mean_procrastination = mean(Procrastination_total, na.rm = TRUE))
 
 hrs_data_descript %>%
-  tbl_summary(type = list(Age_w2 ~ "continuous2",
-                          Procrastination_total ~ "continuous2",
-                          Depression_total ~ "continuous2",
-                          Loneliness_total ~ "continuous2"),
-              label = names, 
-              statistic = stat, 
-              digits = all_continuous() ~ 2, 
-              missing = "no") %>%
-  bold_labels()
-
-
+  summarise(sd_gender = sd(Gender, na.rm = TRUE))
 
 
 
