@@ -3,6 +3,7 @@
 rm(list=ls()) # Clearing work space
 
 library(dplyr)
+library(ggplot2)
 
 path_data <- "./01__Data/02__Processed_data/"
 
@@ -32,5 +33,16 @@ hrs_data_descript %>%
 hrs_data_descript %>%
   summarise(sd_gender = sd(Gender, na.rm = TRUE))
 
-
+# Testing ---------------------------------------------------------------------
+hrs_data %>%
+  filter(complete.cases(Marital_status, Job_status)) %>%
+  mutate(Procrastination_total = rowSums(select(., starts_with("Procras")), na.rm = TRUE)) %>%
+  mutate(across("Procrastination_total", ~ if_else(. %in% 0, NA, .))) %>%
+  select(Age_w2, Procrastination_total) %>%
+  group_by(Age_w2) %>%
+  summarise(mean_procrastination = mean(Procrastination_total, na.rm = TRUE)) %>%
+  filter(complete.cases(mean_procrastination)) %>%
+  ggplot(aes(x = Age_w2, y = mean_procrastination)) +
+  geom_line() +
+  scale_x_continuous(breaks = seq(25, 95, by = 10))
 
