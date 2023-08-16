@@ -41,7 +41,7 @@ distribution <- ggplot(descriptives, aes(x = Procrastination_total)) +
   theme_bw() +
   ggeasy::easy_center_title()
 
-# Exporting
+# Exporting --------------------------------------------------------------------
 export_path <- "./02__Models/03__SEM/"
 
 cowplot::save_plot(filename = file.path(export_path, "results/03__distribution.png"),
