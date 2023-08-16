@@ -24,7 +24,6 @@ As such, the objectives of this study were twofold:
       <li> <strong> 01__Processing: </strong> Code to process the raw data. </li>
       <li> <strong> 02__DAG: </strong> Code to create a visualisation of the variable relationships for age and procrastination. </li>
       <li> <strong> 03__SEM: </strong> Code for creating the SEM model. </li>
-      <li> <strong> 04__Interaction_Effect: </strong> Test code for assessing potential interaction effect. </li>
     </ul>
 </ul>
 
