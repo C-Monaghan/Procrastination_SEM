@@ -2,11 +2,11 @@
 <h4 align = "center"> Cormac Monaghan & Dr. Joanna McHugh Power </h4>
 
 <h2 align = "left"> Overview </h2>
-<p> Procrastination is a behaviour experienced by individuals of all ages. However, over the years, research has predominantly focused on student and 
-younger adult populations, with <strong> little attention given to procrastination behaviours among older adults </strong>. This complex behaviour is influenced by 
-a multitude of factors. Through previous studies on younger populations, researchers have identified numerous factors closely associated with procrastination. However, to 
-gain a more comprehensive and holistic understanding of procrastination, research also needs to take into consideration procrastination in 
-later life and examine whether these factors also apply to older adults. </p>
+<p> Procrastination is a behaviour performed by various age groups. However, over the years, research has predominantly focused on student and younger adult populations, 
+with <strong> little attention given to procrastination behaviours among older adults </strong>. This complex behaviour is influenced by a multitude of factors. Through 
+previous studies on younger populations, researchers have identified numerous factors closely associated with procrastination. However, to gain a more comprehensive 
+and holistic understanding of procrastination, research also needs to take into consideration procrastination in  later life and examine whether these factors also apply to 
+older adults. </p>
 
 As such, the objectives of this study were twofold:
 <ul>
