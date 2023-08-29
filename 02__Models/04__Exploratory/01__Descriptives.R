@@ -21,15 +21,11 @@ descriptives <- hrs_data %>%
                 ~ if_else(. %in% 0, NA, .))) %>%
   select(Age_w2, age_group, Depression_total, Loneliness_total, Procrastination_total)
 
-# Creating dataset with means --------------------------------------------------
+# Creating dataset with means and errors ---------------------------------------
 means <- descriptives %>%
   group_by(age_group) %>%
-  summarise(Procrastination = mean(Procrastination_total, na.rm = TRUE),
-            Depression = mean(Depression_total, na.rm = TRUE),
-            Loneliness = mean(Loneliness_total, na.rm = TRUE)) %>%
-  tidyr::pivot_longer(cols = -age_group,
-                      names_to = "variable",
-                      values_to = "mean_score")
+  summarise(mean_score = mean(Procrastination_total, na.rm = TRUE),
+            error = sd(Procrastination_total, na.rm = TRUE) / sqrt(n()))
 
 # Plotting graphs --------------------------------------------------------------
 distribution_plot <- ggplot(descriptives, aes(x = Procrastination_total)) +
@@ -41,19 +37,20 @@ distribution_plot <- ggplot(descriptives, aes(x = Procrastination_total)) +
   theme_bw() +
   ggeasy::easy_center_title()
 
-
 line_plot <- means %>%
-  filter(variable == "Procrastination") %>%
-  ggplot(aes(x = age_group, y = mean_score)) +
-  geom_point(colour = "#8F0A0A") +
-  geom_line(group = 1, colour = "#8F0A0A") +
+  ggplot(aes(x = age_group, y = mean_score, group = 1)) +
+  geom_point(colour = "#8F0A0A", size = 1) +
+  geom_line(colour = "#8F0A0A", linewidth = 0.75) +
+  geom_errorbar(aes(ymin = mean_score - error, ymax = mean_score + error),
+                width = 0.1, colour = "#8F0A0A") +
   labs(x = "Age Group", y = "Mean Procrastination") +
   theme_minimal()
 
 bar_plot <- means %>%
-  filter(variable == "Procrastination") %>%
   ggplot(aes(x = age_group, y = mean_score, fill = "#8F0A0A")) +
   geom_bar(stat = "identity", width = 0.7) +
+  geom_errorbar(aes(ymin = mean_score - error, ymax = mean_score + error),
+                width = 0.1, colour = "#8F0A0A") +
   labs(title = "Mean Procrastination Scores Across Age", 
        x = "Age Group", y = "Mean Procrastination") +
   theme_bw() +
