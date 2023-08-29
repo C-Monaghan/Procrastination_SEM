@@ -32,7 +32,7 @@ means <- descriptives %>%
                       values_to = "mean_score")
 
 # Plotting graphs --------------------------------------------------------------
-distribution <- ggplot(descriptives, aes(x = Procrastination_total)) +
+distribution_plot <- ggplot(descriptives, aes(x = Procrastination_total)) +
   geom_density(alpha = 0.7, fill = "#8F0A0A") +
   facet_wrap(~ age_group) +
   labs(title = "Distribution of Procrastination Scores Across Age",
@@ -41,8 +41,31 @@ distribution <- ggplot(descriptives, aes(x = Procrastination_total)) +
   theme_bw() +
   ggeasy::easy_center_title()
 
-# Exporting --------------------------------------------------------------------
-export_path <- "./02__Models/03__SEM/"
 
-cowplot::save_plot(filename = file.path(export_path, "results/03__distribution.png"),
-                   plot = distribution)
+line_plot <- means %>%
+  filter(variable == "Procrastination") %>%
+  ggplot(aes(x = age_group, y = mean_score)) +
+  geom_point(colour = "#8F0A0A") +
+  geom_line(group = 1, colour = "#8F0A0A") +
+  labs(x = "Age Group", y = "Mean Procrastination") +
+  theme_minimal()
+
+bar_plot <- means %>%
+  filter(variable == "Procrastination") %>%
+  ggplot(aes(x = age_group, y = mean_score, fill = "#8F0A0A")) +
+  geom_bar(stat = "identity", width = 0.7) +
+  labs(title = "Mean Procrastination Scores Across Age", 
+       x = "Age Group", y = "Mean Procrastination") +
+  theme_bw() +
+  ggeasy::easy_center_title() +
+  ggeasy::easy_remove_legend()
+
+# Exporting --------------------------------------------------------------------
+export_path <- "./02__Models/04__Exploratory/"
+
+cowplot::save_plot(filename = file.path(export_path, "results/01__distribution_plot.png"),
+                   plot = distribution_plot)
+cowplot::save_plot(filename = file.path(export_path, "results/02__line_plot.png"),
+                   plot = line_plot)
+cowplot::save_plot(filename = file.path(export_path, "results/03__bar_plot.png"),
+                   plot = bar_plot)
