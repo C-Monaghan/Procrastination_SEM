@@ -1,23 +1,23 @@
 import qrcode
 from PIL import Image, ImageDraw
 
-# Define the data you want to encode
-data = "https://github.com/C-Monaghan/Procrastination_SEM"
+# Creating link to repository
+repository = "https://github.com/C-Monaghan/Procrastination_SEM"
 
-# Generate the QR code
+# Specifing QR code parameters
 qr = qrcode.QRCode(
-    version=1,
-    error_correction=qrcode.constants.ERROR_CORRECT_H,
-    box_size=10,
-    border=4,
+    version = 1,
+    error_correction=qrcode.constants.ERROR_CORRECT_H, # High error correction
+    box_size = 10,
+    border = 4,
 )
-qr.add_data(data)
-qr.make(fit=True)
-qr_img = qr.make_image(fill_color="black", back_color="white")
+qr.add_data(repository)
+qr.make(fit = True)
+qr_img = qr.make_image(fill_color = "black", back_color = "white") # Creating QR code
 
 # Create a new image with a blank space in the center
 image_width, image_height = qr_img.size
-blank_space_size = 150  # Adjust this to control the size of the blank space
+blank_space_size = 150 
 
 blank_img = Image.new("RGB", qr_img.size, "white")
 blank_img.paste(qr_img, (0, 0))
