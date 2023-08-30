@@ -48,7 +48,7 @@ line_plot <- means %>%
 
 bar_plot <- means %>%
   ggplot(aes(x = age_group, y = mean_score, fill = "#8F0A0A")) +
-  geom_bar(stat = "identity", width = 0.7) +
+  geom_bar(stat = "identity", width = 0.7, alpha = 0.7) +
   geom_errorbar(aes(ymin = mean_score - error, ymax = mean_score + error),
                 width = 0.1, colour = "#8F0A0A") +
   labs(title = "Mean Procrastination Scores Across Age", 
