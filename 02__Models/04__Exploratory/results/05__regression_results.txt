@@ -1,0 +1,29 @@
+
+Call:
+lm(formula = Total_procrastination ~ Depression_1 + Depression_2 + 
+    Depression_3 + Depression_4 + Depression_5 + Depression_6 + 
+    Depression_7 + Depression_8, data = descriptives)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-28.552  -8.550  -1.151   7.414  34.450 
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept)   12.0226     1.5352   7.831 1.01e-14 ***
+Depression_1  -0.8999     1.2516  -0.719 0.472279    
+Depression_2   3.0355     0.8256   3.677 0.000246 ***
+Depression_3   1.6119     0.7284   2.213 0.027067 *  
+Depression_4   1.2137     1.2641   0.960 0.337152    
+Depression_5   1.9893     0.9894   2.011 0.044569 *  
+Depression_6   0.7883     1.2653   0.623 0.533388    
+Depression_7   2.1866     1.0504   2.082 0.037576 *  
+Depression_8   3.6021     0.9025   3.991 6.95e-05 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 10.98 on 1276 degrees of freedom
+  (24 observations deleted due to missingness)
+Multiple R-squared:  0.1014,	Adjusted R-squared:  0.09581 
+F-statistic: 18.01 on 8 and 1276 DF,  p-value: < 2.2e-16
+
