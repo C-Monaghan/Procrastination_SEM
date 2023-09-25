@@ -60,9 +60,9 @@ bar_plot <- means %>%
 # Exporting --------------------------------------------------------------------
 export_path <- "./02__Models/04__Exploratory/"
 
-cowplot::save_plot(filename = file.path(export_path, "results/01__distribution_plot.png"),
+cowplot::save_plot(filename = file.path(export_path, "results/01__Descriptives/01__distribution_plot.png"),
                    plot = distribution_plot)
-cowplot::save_plot(filename = file.path(export_path, "results/02__line_plot.png"),
+cowplot::save_plot(filename = file.path(export_path, "results/01__Descriptives/02__line_plot.png"),
                    plot = line_plot)
-cowplot::save_plot(filename = file.path(export_path, "results/03__bar_plot.png"),
+cowplot::save_plot(filename = file.path(export_path, "results/01__Descriptives/03__bar_plot.png"),
                    plot = bar_plot)
