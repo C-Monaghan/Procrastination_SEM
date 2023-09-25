@@ -15,9 +15,8 @@ descriptives <- hrs_data %>%
   select(c(starts_with("Depression"), starts_with("Procras"))) %>%
   mutate(Total_depression = rowSums(select(., starts_with("Depression")), na.rm = TRUE),
          Total_procrastination = rowSums(select(., starts_with("Procras")), na.rm = TRUE)) %>%
-  mutate(across(c("Total_depression",
-                  "Total_procrastination"), ~ ifelse(. %in% 0, NA, .))) %>%
-  mutate(Depression_binary = ifelse(Total_depression < 11, 0, 1),
+  mutate(across("Total_procrastination", ~ ifelse(. %in% 0, NA, .))) %>%
+  mutate(Depression_binary = ifelse(Total_depression < 3, 0, 1),
          Depression_binary = factor(Depression_binary), .before = "Depression_1") %>%
   rowwise() %>%
   mutate(Mean_procrastination = round(mean(
@@ -38,15 +37,15 @@ select(starts_with("Depression"), Total_procrastination, -Depression_binary) %>%
     Symptom == "Depression_5" ~ "Loneliness",
     Symptom == "Depression_6" ~ "Lack of Enjoyment",
     Symptom == "Depression_7" ~ "Sadness",
-    Symptom == "Depression_8" ~ "Unmotivated"
+    Symptom == "Depression_8" ~ "Lack of Motivation"
   ), levels = c("Depression", "Fatigue", "Restlessness", "Lack of Happiness",
-                "Loneliness", "Lack of Enjoyment", "Sadness", "Unmotivated"))) %>%
+                "Loneliness", "Lack of Enjoyment", "Sadness", "Lack of Motivation"))) %>%
   filter(complete.cases(Present)) %>%
   group_by(Symptom, Present) %>%
   summarize(mean_procrastination = round(mean(
     Total_procrastination, na.rm = TRUE), 
     digits = 2)) %>%
-  mutate(Present = ifelse(Present == 1, "No", "Yes"),
+  mutate(Present = ifelse(Present == 1, "Present", "Not Present"),
          Present = factor(Present))
 
 # Performing T-Test ------------------------------------------------------------
@@ -54,8 +53,8 @@ results <- t.test(Mean_procrastination ~ Depression_binary,
                   var.equal = TRUE, data = descriptives) # Significant effect is present (p < 0.001)
 
 # Performing multiple linear regression ----------------------------------------
-model <- lm(Mean_procrastination ~ Depression_1 + Depression_2 + Depression_3 + Depression_4 + 
-                                    Depression_5 + Depression_6 + Depression_7 + Depression_8,
+model <- lm(Mean_procrastination ~ Depression_1 + Depression_2 + Depression_3 + Depression_4 +
+                                   Depression_5 + Depression_6 + Depression_7 + Depression_8,
             data = descriptives)
 
 model_summary <- summary(model)
@@ -63,10 +62,19 @@ model_summary <- summary(model)
 # Plotting ---------------------------------------------------------------------
 # Mean Procrastination Scores Per Symptom
 symptom_plot <- ggplot(summary_data, aes(x = Symptom, y = mean_procrastination, fill = Present)) +
+  # Bar chart
   geom_bar(stat = "identity", position = "dodge") +
+  # Specifying colour and theme
+  scale_fill_manual(values = c("Present" = "#c1272D", "Not Present" = "#0000a7")) +
+  theme_minimal(base_size = 14, base_family = "Arial") +
+  # Add data labels
+  geom_text(aes(label = round(mean_procrastination, 2)), 
+            position = position_dodge(width = 0.9), 
+            vjust = -0.5, size = 4) +
+  # Scaling y-axis so labels fit
+  ylim(0, max(summary_data$mean_procrastination) * 1.1) +
   labs(x = "", y = "Mean Procrastination Scores", 
-       title = "Mean Procrastination Scores Per Symptom") +
-  theme_bw() +
+       title = "Mean Procrastination Scores by Symptom Presence") +
   ggeasy::easy_center_title() +
   ggeasy::easy_add_legend_title("Symptom Present ") +
   ggeasy::easy_move_legend(to = c("bottom"))
@@ -82,4 +90,21 @@ writeLines(output_2, file.path(export_path, "results/02__Regression/02__regressi
 
 cowplot::save_plot(filename = file.path(export_path, "results/02__Regression/03__symptom_plot.png"),
                    plot = symptom_plot, base_height = 7)
-  
+
+
+tab <- apaTables::apa.reg.table(model)
+View(tab)
+
+
+tab$table_block_results[[1]]$model_details_extended$r_pvalue
+
+model$qr
+
+
+# Calculate zero-order correlations
+correlations <- cor(descriptives[c("Depression_1", "Depression_2", "Depression_3", "Depression_4",
+                                   "Depression_5", "Depression_6", "Depression_7", "Depression_8")])
+
+# Print the correlation matrix
+print(correlations)
+

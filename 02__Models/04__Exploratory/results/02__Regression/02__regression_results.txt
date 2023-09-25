@@ -10,7 +10,7 @@ Residuals:
 
 Coefficients:
               Estimate Std. Error t value Pr(>|t|)    
-(Intercept)   1.016869   0.129110   7.876 7.18e-15 ***
+(Intercept)   2.174794   0.033586  64.754  < 2e-16 ***
 Depression_1 -0.009473   0.105261  -0.090   0.9283    
 Depression_2  0.296977   0.069430   4.277 2.03e-05 ***
 Depression_3  0.116074   0.061255   1.895   0.0583 .  
