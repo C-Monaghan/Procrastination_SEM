@@ -60,11 +60,26 @@ model <- lm(Mean_procrastination ~ Depression_1 + Depression_2 + Depression_3 + 
 model_summary <- summary(model)
 
 # Plotting ---------------------------------------------------------------------
+# Mean Procrastination Scores Between Depressed/Not Depressed
+depression_plot <- descriptives %>%
+  select(Depression_binary, Mean_procrastination) %>%
+  filter(complete.cases(Depression_binary)) %>%
+  group_by(Depression_binary) %>%
+  summarise(Procrastination = mean(Mean_procrastination, na.rm = TRUE)) %>%
+  mutate(Depression_binary = ifelse(Depression_binary == 0, "Not Depressed", "Depressed"),
+         Depression_binary = factor(Depression_binary)) %>%
+  ggplot(aes(x = Depression_binary, y = Procrastination, fill = Depression_binary)) +
+  geom_bar(stat = "identity", width = .50) +
+  scale_fill_manual(values = c("Depressed" = "#c1272D", "Not Depressed" = "#0000a7")) +
+  theme_minimal(base_size = 14, base_family = "Arial") +
+  labs(x = "", y = "Mean Procrastination", 
+       title = "Mean Procrastination Scores per Group") +
+  ggeasy::easy_center_title() +
+  ggeasy::easy_remove_legend()
+
 # Mean Procrastination Scores Per Symptom
 symptom_plot <- ggplot(summary_data, aes(x = Symptom, y = mean_procrastination, fill = Present)) +
-  # Bar chart
   geom_bar(stat = "identity", position = "dodge") +
-  # Specifying colour and theme
   scale_fill_manual(values = c("Present" = "#c1272D", "Not Present" = "#0000a7")) +
   theme_minimal(base_size = 14, base_family = "Arial") +
   # Add data labels
@@ -76,7 +91,7 @@ symptom_plot <- ggplot(summary_data, aes(x = Symptom, y = mean_procrastination, 
   labs(x = "", y = "Mean Procrastination Scores", 
        title = "Mean Procrastination Scores by Symptom Presence") +
   ggeasy::easy_center_title() +
-  ggeasy::easy_add_legend_title("Symptom Present ") +
+  ggeasy::easy_add_legend_title("") +
   ggeasy::easy_move_legend(to = c("bottom"))
 
 # Exporting --------------------------------------------------------------------
@@ -90,21 +105,9 @@ writeLines(output_2, file.path(export_path, "results/02__Regression/02__regressi
 
 cowplot::save_plot(filename = file.path(export_path, "results/02__Regression/03__symptom_plot.png"),
                    plot = symptom_plot, base_height = 7)
+cowplot::save_plot(filename = file.path(export_path, "results/02__Regression/04__depression_plot.png"),
+                   plot = depression_plot)
+  
+  
 
-
-tab <- apaTables::apa.reg.table(model)
-View(tab)
-
-
-tab$table_block_results[[1]]$model_details_extended$r_pvalue
-
-model$qr
-
-
-# Calculate zero-order correlations
-correlations <- cor(descriptives[c("Depression_1", "Depression_2", "Depression_3", "Depression_4",
-                                   "Depression_5", "Depression_6", "Depression_7", "Depression_8")])
-
-# Print the correlation matrix
-print(correlations)
 

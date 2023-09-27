@@ -17,7 +17,7 @@ descriptives <- hrs_data %>%
   mutate(Depression_total = rowSums(select(., starts_with("Depression")), na.rm = TRUE),
          Loneliness_total = rowSums(select(., starts_with("Loneliness")), na.rm = TRUE),
          Procrastination_total = rowSums(select(., starts_with("Procras")), na.rm = TRUE)) %>%
-  mutate(across(c("Depression_total", "Loneliness_total", "Procrastination_total"), 
+  mutate(across(c("Loneliness_total", "Procrastination_total"), 
                 ~ if_else(. %in% 0, NA, .))) %>%
   select(Age_w2, age_group, Depression_total, Loneliness_total, Procrastination_total)
 
