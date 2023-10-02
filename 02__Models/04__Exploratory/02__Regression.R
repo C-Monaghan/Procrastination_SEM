@@ -94,6 +94,13 @@ symptom_plot <- ggplot(summary_data, aes(x = Symptom, y = mean_procrastination, 
   ggeasy::easy_add_legend_title("") +
   ggeasy::easy_move_legend(to = c("bottom"))
 
+# We would like to bold certain labels on this graph
+text_format <- c("plain", "bold", "plain", "plain", 
+                 "bold", "plain", "plain", "bold")
+
+symptom_plot <- symptom_plot +
+  theme(axis.text.x = element_text(face = text_format))
+
 # Exporting --------------------------------------------------------------------
 export_path <- "./02__Models/04__Exploratory/"
 
