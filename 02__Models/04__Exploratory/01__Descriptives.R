@@ -37,7 +37,19 @@ distribution_plot <- ggplot(descriptives, aes(x = Procrastination_total)) +
   theme_bw() +
   ggeasy::easy_center_title()
 
-line_plot <- means %>%
+line_plot_continous <- descriptives %>%
+  select(Age_w2, Procrastination_total) %>%
+  group_by(Age_w2) %>%
+  summarise(mean = mean(Procrastination_total, na.rm = TRUE)) %>%
+  ggplot(aes(x = Age_w2, y = mean)) +
+  geom_line(colour = "#8F0A0A", linewidth = 0.75) +
+  theme_minimal(base_size = 14, base_family = "Arial") +
+  scale_x_continuous(breaks = seq(20, 100, by = 5)) +
+  labs(x = "Age", y = "Mean Procrastination", 
+       title = "Mean Procrastination Scores Across the Life Span") +
+  ggeasy::easy_center_title()
+
+line_plot_grouped <- means %>%
   ggplot(aes(x = age_group, y = mean_score, group = 1)) +
   geom_point(colour = "#8F0A0A", size = 1) +
   geom_line(colour = "#8F0A0A", linewidth = 0.75) +
@@ -62,23 +74,14 @@ export_path <- "./02__Models/04__Exploratory/"
 
 cowplot::save_plot(filename = file.path(export_path, "results/01__Descriptives/01__distribution_plot.png"),
                    plot = distribution_plot)
-cowplot::save_plot(filename = file.path(export_path, "results/01__Descriptives/02__line_plot.png"),
-                   plot = line_plot)
+cowplot::save_plot(filename = file.path(export_path, "results/01__Descriptives/02a__line_plot_continous.png"),
+                   plot = line_plot_continous)
+cowplot::save_plot(filename = file.path(export_path, "results/01__Descriptives/02b__line_plot_grouped.png"),
+                   plot = line_plot_grouped)
 cowplot::save_plot(filename = file.path(export_path, "results/01__Descriptives/03__bar_plot.png"),
                    plot = bar_plot)
 
 
 
-# Testing ----------------------------------------------------------------------
-descriptives %>%
-  select(Age_w2, Procrastination_total) %>%
-  group_by(Age_w2) %>%
-  summarise(mean = mean(Procrastination_total, na.rm = TRUE)) %>%
-  ggplot(aes(x = Age_w2, y = mean)) +
-  geom_line(colour = "#8F0A0A", linewidth = 0.75) +
-  theme_minimal(base_size = 14, base_family = "Arial") +
-  scale_x_continuous(breaks = seq(20, 100, by = 5)) +
-  labs(x = "Age", y = "Mean Procrastination", 
-       title = "Mean Procrastination Scores Across the Life Span") +
-  ggeasy::easy_center_title()
+
   
