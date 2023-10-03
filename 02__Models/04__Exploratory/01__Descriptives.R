@@ -66,3 +66,19 @@ cowplot::save_plot(filename = file.path(export_path, "results/01__Descriptives/0
                    plot = line_plot)
 cowplot::save_plot(filename = file.path(export_path, "results/01__Descriptives/03__bar_plot.png"),
                    plot = bar_plot)
+
+
+
+# Testing ----------------------------------------------------------------------
+descriptives %>%
+  select(Age_w2, Procrastination_total) %>%
+  group_by(Age_w2) %>%
+  summarise(mean = mean(Procrastination_total, na.rm = TRUE)) %>%
+  ggplot(aes(x = Age_w2, y = mean)) +
+  geom_line(colour = "#8F0A0A", linewidth = 0.75) +
+  theme_minimal(base_size = 14, base_family = "Arial") +
+  scale_x_continuous(breaks = seq(20, 100, by = 5)) +
+  labs(x = "Age", y = "Mean Procrastination", 
+       title = "Mean Procrastination Scores Across the Life Span") +
+  ggeasy::easy_center_title()
+  
