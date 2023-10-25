@@ -16,7 +16,7 @@ descriptives <- hrs_data %>%
   mutate(Total_depression = rowSums(select(., starts_with("Depression")), na.rm = TRUE),
          Total_procrastination = rowSums(select(., starts_with("Procras")), na.rm = TRUE)) %>%
   mutate(across("Total_procrastination", ~ ifelse(. %in% 0, NA, .))) %>%
-  mutate(Depression_binary = ifelse(Total_depression < 3, 0, 1),
+  mutate(Depression_binary = ifelse(Total_depression < 1, 0, 1),
          Depression_binary = factor(Depression_binary), .before = "Depression_1") %>%
   rowwise() %>%
   mutate(Mean_procrastination = round(mean(
@@ -49,8 +49,8 @@ select(starts_with("Depression"), Total_procrastination, -Depression_binary) %>%
          Present = factor(Present))
 
 # Performing T-Test ------------------------------------------------------------
-results <- t.test(Mean_procrastination ~ Depression_binary, 
-                  var.equal = TRUE, data = descriptives) # Significant effect is present (p < 0.001)
+results <- t.test(Total_procrastination ~ Depression_binary, 
+                  var.equal = TRUE, data = descriptives)
 
 # Performing multiple linear regression ----------------------------------------
 model <- lm(Mean_procrastination ~ Depression_1 + Depression_2 + Depression_3 + Depression_4 +
@@ -62,10 +62,10 @@ model_summary <- summary(model)
 # Plotting ---------------------------------------------------------------------
 # Mean Procrastination Scores Between Depressed/Not Depressed
 depression_plot <- descriptives %>%
-  select(Depression_binary, Mean_procrastination) %>%
+  select(Depression_binary, Total_procrastination) %>%
   filter(complete.cases(Depression_binary)) %>%
   group_by(Depression_binary) %>%
-  summarise(Procrastination = mean(Mean_procrastination, na.rm = TRUE)) %>%
+  summarise(Procrastination = mean(Total_procrastination, na.rm = TRUE)) %>%
   mutate(Depression_binary = ifelse(Depression_binary == 0, "Not Depressed", "Depressed"),
          Depression_binary = factor(Depression_binary)) %>%
   ggplot(aes(x = Depression_binary, y = Procrastination, fill = Depression_binary)) +
@@ -114,7 +114,3 @@ cowplot::save_plot(filename = file.path(export_path, "results/02__Regression/03_
                    plot = symptom_plot, base_height = 7)
 cowplot::save_plot(filename = file.path(export_path, "results/02__Regression/04__depression_plot.png"),
                    plot = depression_plot)
-  
-  
-
-

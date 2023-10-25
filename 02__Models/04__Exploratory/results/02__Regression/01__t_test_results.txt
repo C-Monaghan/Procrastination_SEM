@@ -1,12 +1,12 @@
 
 	Two Sample t-test
 
-data:  Mean_procrastination by Depression_binary
-t = -9.5716, df = 1302, p-value < 2.2e-16
+data:  Total_procrastination by Depression_binary
+t = -9.296, df = 1302, p-value < 2.2e-16
 alternative hypothesis: true difference in means between group 0 and group 1 is not equal to 0
 95 percent confidence interval:
- -0.7415353 -0.4892703
+ -7.042506 -4.588035
 sample estimates:
 mean in group 0 mean in group 1 
-       2.290379        2.905782 
+       25.24538        31.06065 
 
