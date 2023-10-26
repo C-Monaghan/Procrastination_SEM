@@ -1,5 +1,5 @@
-<h1 align = "center"> Age, Procrastination, Depressive Symptomatology, And Loneliness: A Structural Equation Modelling Approach </h1>
-<h4 align = "center"> Cormac Monaghan & Dr. Joanna McHugh Power </h4>
+<h1 align = "center"> Procrastination, Depressive Symptomatology, and Loneliness in Later Life </h1>
+<h4 align = "center"> Cormac Monaghan, Dr. Ione Avila-Palencia, Dr. Duke Han, & Dr. Joanna McHugh Power </h4>
 
 <h2 align = "left"> Overview </h2>
 <p> Procrastination is a behaviour performed by various age groups. However, over the years, research has predominantly focused on student and younger adult populations, 
@@ -10,8 +10,8 @@ older adults. </p>
 
 As such, the objectives of this study were twofold:
 <ul>
-  <li> Investigate the direct effect of age on procrastination. </li>
-  <li> Investigate the indirect effects of loneliness and depressive symptomology on procrastination tendencies among older adults. </li>
+  <li> Investigate the potential association between age and procrastination. </li>
+  <li> Investigate the mediating roles of depressive symptomology and loneliness on procrastination tendencies among older adults. </li>
 </ul>
 
 <h2 align = "left"> Repository Structure </h2>
@@ -24,6 +24,7 @@ As such, the objectives of this study were twofold:
       <li> <strong> 01__Processing: </strong> Code to process the raw data. </li>
       <li> <strong> 02__DAG: </strong> Code to create a visualisation of the variable relationships for age and procrastination. </li>
       <li> <strong> 03__SEM: </strong> Code for creating the SEM model. </li>
+      <li> <strong> 04__Exploratory: </strong> Code for descriptives and supplementary analysis </li>
     </ul>
 </ul>
 
