@@ -23,12 +23,59 @@ descriptives <- hrs_data %>%
     c_across(paste0("Procras_", 1:12)), na.rm = TRUE), 
     digits = 2))
 
-# Descriptives per symptom
+# Performing T-Test and linear regression --------------------------------------
+t.test(Total_procrastination ~ Depression_binary, var.equal = TRUE, data = descriptives)
+
+model <- lm(Mean_procrastination ~ Depression_1 + Depression_2 + Depression_3 + 
+            Depression_4 + Depression_5 + Depression_6 + Depression_7 + 
+            Depression_8, data = descriptives)
+
+model_summary <- summary(model)
+
+# Visualizing Model
+# Residuals vs Fitted Values
+ggplot(data = data.frame(fitted = model$fitted.values, 
+                         residuals = model$residuals), 
+       aes(x = fitted, y = residuals)) +
+  geom_point() +
+  geom_hline(yintercept = 0, colour = "red") +
+  labs(x = "Fitted Values", y = "Residuals", title = "Residuals vs. Fitted Values") +
+  theme_classic() +
+  ggeasy::easy_center_title()
+
+# Q-Q Plot
+ggplot(data = data.frame(residuals = model$residuals), mapping = aes(sample = residuals)) +
+  qqplotr::stat_qq_band() +
+  qqplotr::stat_qq_line() +
+  qqplotr::stat_qq_point() +
+  labs(x = "Theoretical Quantiles", y = "Sample Quantiles", title = "Normal Q-Q Plot") +
+  theme_classic() +
+  ggeasy::easy_center_title()
+
+# Scale-Location Plot
+ggplot(data.frame(fitted = model$fitted.values, sqrt_resid = sqrt(abs(model$residuals))), aes(x = fitted, y = sqrt_resid)) +
+  geom_point() +
+  labs(x = "Fitted values", y = "√|Standardized Residuals|", title = "Scale-Location Plot") +
+  theme_classic() +
+  ggeasy::easy_center_title()
+
+# Cook's Distance Plot
+cooksd <- cooks.distance(model)
+ggplot(data.frame(observation = seq_along(cooksd), cooksd), aes(x = observation, y = cooksd)) +
+  geom_point() +
+  geom_hline(yintercept = 4/length(model$residuals), color = "red", linetype = "dashed") +
+  labs(x = "Observation", y = "Cook's Distance", title = "Cook's Distance Plot") +
+  theme_classic() +
+  ggeasy::easy_center_title()
+
+# Creating a summary dataset for plotting --------------------------------------
 summary_data <- descriptives %>%
-select(starts_with("Depression"), Total_procrastination, -Depression_binary) %>%
+  # Pivoting to long format
+  select(starts_with("Depression"), Total_procrastination, -Depression_binary) %>%
   tidyr::pivot_longer(cols = starts_with("Depression"), 
                       names_to = "Symptom", 
                       values_to = "Present") %>%
+  # Changing depression names to actual symptom names
   mutate(Symptom = factor(case_when(
     Symptom == "Depression_1" ~ "Depression",
     Symptom == "Depression_2" ~ "Fatigue",
@@ -40,6 +87,7 @@ select(starts_with("Depression"), Total_procrastination, -Depression_binary) %>%
     Symptom == "Depression_8" ~ "Lack of Motivation"
   ), levels = c("Depression", "Fatigue", "Restlessness", "Lack of Happiness",
                 "Loneliness", "Lack of Enjoyment", "Sadness", "Lack of Motivation"))) %>%
+  # Grouping
   filter(complete.cases(Present)) %>%
   group_by(Symptom, Present) %>%
   summarize(mean_procrastination = round(mean(
@@ -48,18 +96,6 @@ select(starts_with("Depression"), Total_procrastination, -Depression_binary) %>%
   mutate(Present = ifelse(Present == 1, "Present", "Not Present"),
          Present = factor(Present))
 
-# Performing T-Test ------------------------------------------------------------
-results <- t.test(Total_procrastination ~ Depression_binary, 
-                  var.equal = TRUE, data = descriptives)
-
-# Performing multiple linear regression ----------------------------------------
-model <- lm(Mean_procrastination ~ Depression_1 + Depression_2 + Depression_3 + Depression_4 +
-                                   Depression_5 + Depression_6 + Depression_7 + Depression_8,
-            data = descriptives)
-
-model_summary <- summary(model)
-
-# Plotting ---------------------------------------------------------------------
 # Mean Procrastination Scores Between Depressed/Not Depressed
 depression_plot <- descriptives %>%
   select(Depression_binary, Total_procrastination) %>%
@@ -114,3 +150,4 @@ cowplot::save_plot(filename = file.path(export_path, "results/02__Regression/03_
                    plot = symptom_plot, base_height = 7)
 cowplot::save_plot(filename = file.path(export_path, "results/02__Regression/04__depression_plot.png"),
                    plot = depression_plot)
+  
